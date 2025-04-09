@@ -9,6 +9,10 @@ const googleClient = new OpenAI({
   apiKey: process.env.GEMINI_BANGERBENCH_API_KEY,
   baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/"
 });
+const deepseekClient = new OpenAI({
+  apiKey: process.env.DEEPSEEK_BANGERBENCH_API_KEY,
+  baseURL: "https://api.deepseek.com"
+});
 
 export async function generateWithAnthropic(
   model: Model,
@@ -94,9 +98,35 @@ export async function generateWithGoogle(
   };
 }
 
+export async function generateWithDeepseek(
+  model: Model,
+  system_prompt: string,
+  user_msg: string
+): Promise<{ tweet: string; usage: any; raw?: any }> {
+  const tokenKey = model.outputTokenKey || "max_tokens";
+
+  const payload: any = {
+    model: model.id,
+    messages: [
+      { role: "system", content: system_prompt },
+      { role: "user", content: user_msg }
+    ],
+    [tokenKey]: model.maxTokens
+  };
+
+  const response = await deepseekClient.chat.completions.create(payload);
+
+  return {
+    tweet: response.choices?.[0]?.message?.content?.trim() || "",
+    usage: response.usage,
+    raw: response
+  };
+}
+
 
 export const providers = {
   anthropic: generateWithAnthropic,
   openai: generateWithOpenAI,
-  google: generateWithGoogle
+  google: generateWithGoogle,
+  deepseek: generateWithDeepseek
 };

@@ -1,5 +1,5 @@
 export interface Model {
-  provider: "anthropic" | "openai" | "google";
+  provider: "anthropic" | "openai" | "google" | "deepseek";
   id: string;
   displayName: string;
   thinking: boolean;
@@ -93,25 +93,44 @@ export const MODELS: Model[] = [
   //   reasoningEffort: "low"
   // },
 
-  // Google Models
+  // // Google Models
+  // {
+  //   provider: "google",
+  //   id: "gemini-2.5-pro-preview-03-25",
+  //   displayName: "Gemini 2.5 Pro",
+  //   thinking: true,
+  //   maxTokens: 2200,
+  //   outputTokenKey: "max_completion_tokens",
+  //   reasoningEffort: "low"
+  // },
+  // {
+  //   provider: "google",
+  //   id: "gemini-2.0-flash",
+  //   displayName: "Gemini 2.0 Flash",
+  //   thinking: true,
+  //   maxTokens: 2200,
+  //   outputTokenKey: "max_completion_tokens",
+  //   reasoningEffort: "low"
+  // },
+
+  // Deepseek Models
   {
-    provider: "google",
-    id: "gemini-2.5-pro-preview-03-25",
-    displayName: "Gemini 2.5 Pro",
+    provider: "deepseek",
+    id: "deepseek-reasoner",
+    displayName: "DeepSeek-R1",
     thinking: true,
     maxTokens: 2200,
     outputTokenKey: "max_completion_tokens",
     reasoningEffort: "low"
   },
   {
-    provider: "google",
-    id: "gemini-2.0-flash",
-    displayName: "Gemini 2.0 Flash",
-    thinking: true,
-    maxTokens: 2200,
-    outputTokenKey: "max_completion_tokens",
-    reasoningEffort: "low"
-  },
+    provider: "deepseek",
+    id: "deepseek-chat",
+    displayName: "Deepseek-V3",
+    thinking: false,
+    maxTokens: 200,
+    outputTokenKey: "max_tokens"
+  }
 ];
 
 export function getModelById(modelId: string): Model | undefined {

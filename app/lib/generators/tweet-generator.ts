@@ -1,5 +1,5 @@
 import { MODELS } from "./config";
-import { generateWithAnthropic, generateWithOpenAI, generateWithGoogle } from "./providers";
+import { providers } from "./providers";
 
 export async function generateTweet(
   modelId: string, 
@@ -8,14 +8,7 @@ export async function generateTweet(
 ): Promise<{ tweet: string; usage: any; raw?: any; }> {
   const model = MODELS.find(m => m.id === modelId);
   if (!model) throw new Error(`Model not found: ${modelId}`);
-  if (model.provider === "anthropic") {
-    return generateWithAnthropic(model, system_prompt, user_msg);
-  } else if (model.provider === "openai") {
-    return generateWithOpenAI(model, system_prompt, user_msg);
-  } else if (model.provider === "google") {
-    return generateWithGoogle(model, system_prompt, user_msg);
-  }
-  throw new Error(`Unknown provider: ${model.provider}`);
+  return providers[model.provider](model, system_prompt, user_msg)
 }
 
 export async function generateAllTweets(
