@@ -1,25 +1,20 @@
-#!/usr/bin/env ts-node --esm
-
 import 'dotenv/config';
 import { PROMPTS } from '../app/lib/generators/config';
 import { generateAllTweets } from '../app/lib/generators/tweet-generator';
 
 async function main() {
-  const topic = "the latest AI developments";
+  const topic = "gamergate";
 
   const context = `
-- OpenAI just announced GPT-5 with 10 trillion parameters
-- Google released a new multimodal model that can understand and generate images, text, and code
-- The EU just passed stricter AI regulation laws
-- A new study shows 65% of Gen Z prefers AI-generated content on social media
+A gamergate (/ˈɡæmərˌɡeɪt/ GAMM-ər-gayt) is a mated worker ant that can reproduce sexually, i.e., lay fertilized eggs that will develop as females. In the vast majority of ant species, workers are sterile and gamergates are restricted to taxa where the workers have a functional sperm reservoir ('spermatheca'). In some species, gamergates reproduce in addition to winged queens (usually upon the death of the original foundress), while in other species the queen caste has been completely replaced by gamergates. In gamergate species, all workers in a colony have similar reproductive potentials, but as a result of physical interactions, a dominance hierarchy is formed and only one or a few top-ranking workers can mate (usually with foreign males) and produce eggs. Subsequently, however, aggression is no longer needed as gamergates secrete chemical signals that inform the other workers of their reproductive status in the colony.
+
+Depending on the species, there can be one gamergate per colony (monogyny) or several gamergates (polygyny). Most gamergate species have colonies with a few hundred or fewer workers.
+
+
   `;
 
   const prevWork = `
-@TechGuru: "AI is replacing jobs faster than we can create new ones. Time to start hoarding skills like a dragon hoards gold." (23K likes, 5K retweets)
-
-@FutureThinker: "Hot take: humans who collaborate with AI will replace humans who don't. It's not AI vs humans, it's AI-enabled humans vs the rest." (45K likes, 12K retweets)
-
-@JokeBot3000: "My AI assistant just asked for a raise. I told it I'd double its salary and now it's trying to figure out what 2 × 0 is." (18K likes, 3K retweets)
+sorry can't help you here, you gotta come up with shit on your own
   `;
 
   const userMsg = [
@@ -30,25 +25,32 @@ async function main() {
 
   console.log('\n--- Testing All Models ---\nGenerating tweets from all models...\n');
 
-  try {
-    const results = await generateAllTweets(PROMPTS.system, userMsg);
+  const results = await generateAllTweets(PROMPTS.system, userMsg);
 
-    for (const { displayName, provider, tweet } of results) {
-      console.log('-----------------------------------');
-      console.log(`${displayName} (${provider}):`);
-      console.log(tweet);
-      console.log(`Character count: ${tweet.length}`);
-      console.log('-----------------------------------\n');
+  for (const { displayName, provider, tweet, usage, raw } of results) {
+    console.log('-----------------------------------');
+    console.log(`${displayName} (${provider}):`);
+    console.log(tweet);
+    console.log(`Character count: ${tweet.length}`);
+  
+    if (usage) {
+      console.log(`Input tokens: ${usage.input_tokens ?? usage.prompt_tokens}`);
+      console.log(`Output tokens: ${usage.output_tokens ?? usage.completion_tokens}`);
+      console.log(`Total tokens: ${usage.total_tokens}`);
     }
-
-    console.log('--- Summary ---');
-    results.forEach(r => {
-      console.log(`${r.displayName}: ${r.tweet.length} chars`);
-    });
-  } catch (err) {
-    console.error('Error generating tweets:', err);
-    process.exit(1);
+  
+    // console.dir(raw ?? '[no raw response returned]', { depth: null });
+  
+    console.log('-----------------------------------\n');
   }
+
+  console.log('--- Summary ---');
+  results.forEach(r => {
+    console.log(`${r.displayName}: ${r.tweet.length} chars`);
+  });
 }
 
-main();
+main().catch(err => {
+  console.error('Error generating tweets:', err);
+  process.exit(1);
+});

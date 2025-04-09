@@ -5,7 +5,7 @@ export async function generateTweet(
   modelId: string, 
   system_prompt: string, 
   user_msg: string
-): Promise<string> {
+): Promise<{ tweet: string; usage: any; raw?: any; }> {
   const model = MODELS.find(m => m.id === modelId);
   if (!model) throw new Error(`Model not found: ${modelId}`);
   if (model.provider === "anthropic") {
@@ -23,12 +23,14 @@ export async function generateAllTweets(
   const results = [];
   for (const model of MODELS) {
     try {
-      const tweet = await generateTweet(model.id, system_prompt, user_msg);
+      const { tweet, usage, raw } = await generateTweet(model.id, system_prompt, user_msg);
       results.push({
         provider: model.provider,
         model: model.id,
         displayName: model.displayName,
         tweet,
+        usage,
+        raw,
         timestamp: new Date().toISOString()
       });
     } catch (err) {
