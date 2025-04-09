@@ -3,34 +3,27 @@ import { generateWithAnthropic, generateWithOpenAI } from "./providers";
 
 export async function generateTweet(
   modelId: string, 
-  prompt: string, 
-  context?: string, 
-  prevWork?: string
+  system_prompt: string, 
+  user_msg: string
 ): Promise<string> {
   const model = MODELS.find(m => m.id === modelId);
   if (!model) throw new Error(`Model not found: ${modelId}`);
   if (model.provider === "anthropic") {
-    return generateWithAnthropic(model, prompt, context, prevWork);
+    return generateWithAnthropic(model, system_prompt, user_msg);
   } else if (model.provider === "openai") {
-    return generateWithOpenAI(model, prompt, context, prevWork);
+    return generateWithOpenAI(model, system_prompt, user_msg);
   }
   throw new Error(`Unknown provider: ${model.provider}`);
 }
 
 export async function generateAllTweets(
-  prompt: string, 
-  context?: string, 
-  prevWork?: string
+  system_prompt: string,
+  user_msg: string
 ): Promise<any[]> {
   const results = [];
   for (const model of MODELS) {
     try {
-      let tweet;
-      if (model.provider === "anthropic") {
-        tweet = await generateWithAnthropic(model, prompt, context, prevWork);
-      } else if (model.provider === "openai") {
-        tweet = await generateWithOpenAI(model, prompt, context, prevWork);
-      }
+      const tweet = await generateTweet(model.id, system_prompt, user_msg);
       results.push({
         provider: model.provider,
         model: model.id,
