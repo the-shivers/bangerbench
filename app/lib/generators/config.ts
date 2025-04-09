@@ -1,5 +1,5 @@
 export interface Model {
-  provider: "anthropic" | "openai";
+  provider: "anthropic" | "openai" | "google";
   id: string;
   displayName: string;
   thinking: boolean;
@@ -25,73 +25,93 @@ export const PROMPTS = {
 };
   
 export const MODELS: Model[] = [
-  // Anthropic models
-  {
-    provider: "anthropic",
-    id: "claude-3-7-sonnet-20250219",
-    displayName: "Claude 3.7 Sonnet",
-    thinking: true,
-    maxTokens: 2200, // total budget
-    outputTokenKey: "max_tokens",
-    thinkingBudget: 2000 // we'll assume 200 reserved for tweet
-  },
-  {
-    provider: "anthropic",
-    id: "claude-3-5-sonnet-20241022",
-    displayName: "Claude 3.5 Sonnet",
-    thinking: false,
-    maxTokens: 500
-  },
-  {
-    provider: "anthropic",
-    id: "claude-3-5-haiku-20241022",
-    displayName: "Claude 3.5 Haiku",
-    thinking: false,
-    maxTokens: 200
-  },
-  {
-    provider: "anthropic",
-    id: "claude-3-opus-20240229",
-    displayName: "Claude 3 Opus",
-    thinking: false,
-    maxTokens: 200,
-  },
+  // // Anthropic models
+  // {
+  //   provider: "anthropic",
+  //   id: "claude-3-7-sonnet-20250219",
+  //   displayName: "Claude 3.7 Sonnet",
+  //   thinking: true,
+  //   maxTokens: 2200, // total budget
+  //   outputTokenKey: "max_tokens",
+  //   thinkingBudget: 2000 // we'll assume 200 reserved for tweet
+  // },
+  // {
+  //   provider: "anthropic",
+  //   id: "claude-3-5-sonnet-20241022",
+  //   displayName: "Claude 3.5 Sonnet",
+  //   thinking: false,
+  //   maxTokens: 500
+  // },
+  // {
+  //   provider: "anthropic",
+  //   id: "claude-3-5-haiku-20241022",
+  //   displayName: "Claude 3.5 Haiku",
+  //   thinking: false,
+  //   maxTokens: 200
+  // },
+  // {
+  //   provider: "anthropic",
+  //   id: "claude-3-opus-20240229",
+  //   displayName: "Claude 3 Opus",
+  //   thinking: false,
+  //   maxTokens: 200,
+  // },
 
-  // OpenAI models
+  // // OpenAI models
+  // {
+  //   provider: "openai",
+  //   id: "gpt-4.5-preview",
+  //   displayName: "GPT-4.5 Preview",
+  //   thinking: false,
+  //   maxTokens: 250,
+  //   outputTokenKey: "max_tokens"
+  // },
+  // {
+  //   provider: "openai",
+  //   id: "gpt-4o",
+  //   displayName: "GPT-4o",
+  //   thinking: false,
+  //   maxTokens: 200,
+  //   outputTokenKey: "max_tokens"
+  // },
+  // {
+  //   provider: "openai",
+  //   id: "o3-mini",
+  //   displayName: "o3 Mini",
+  //   thinking: false,
+  //   maxTokens: 2200,
+  //   outputTokenKey: "max_completion_tokens",
+  //   reasoningEffort: "low"
+  // },
+  // {
+  //   provider: "openai",
+  //   id: "o1",
+  //   displayName: "o1",
+  //   thinking: false,
+  //   maxTokens: 2200,
+  //   outputTokenKey: "max_completion_tokens",
+  //   reasoningEffort: "low"
+  // },
+
+  // Google Models
   {
-    provider: "openai",
-    id: "gpt-4.5-preview",
-    displayName: "GPT-4.5 Preview",
-    thinking: false,
-    maxTokens: 250,
-    outputTokenKey: "max_tokens"
-  },
-  {
-    provider: "openai",
-    id: "gpt-4o",
-    displayName: "GPT-4o",
-    thinking: false,
-    maxTokens: 200,
-    outputTokenKey: "max_tokens"
-  },
-  {
-    provider: "openai",
-    id: "o3-mini",
-    displayName: "o3 Mini",
-    thinking: false,
+    provider: "google",
+    id: "gemini-2.5-pro-preview-03-25",
+    displayName: "Gemini 2.5 Pro",
+    thinking: true,
     maxTokens: 2200,
     outputTokenKey: "max_completion_tokens",
     reasoningEffort: "low"
   },
   {
-    provider: "openai",
-    id: "o1",
-    displayName: "o1",
-    thinking: false,
+    provider: "google",
+    id: "gemini-2.0-flash",
+    displayName: "Gemini 2.0 Flash",
+    thinking: true,
     maxTokens: 2200,
     outputTokenKey: "max_completion_tokens",
     reasoningEffort: "low"
-  }
+  },
 ];
 
 export function getModelById(modelId: string): Model | undefined {
